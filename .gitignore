@@ -27,6 +27,10 @@
 *.i*86
 *.x86_64
 *.hex
+*.bin
 
 # Debug files
 *.dSYM/
+
+# Configuration file
+user/user_config.h
