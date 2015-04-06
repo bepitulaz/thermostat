@@ -33,4 +33,4 @@
 *.dSYM/
 
 # Configuration file
-user/user_config.h
+include/user_config.h
