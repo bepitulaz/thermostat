@@ -7,13 +7,12 @@ note: You can also use DHT22 sensor for this project.
 
 1. Install the build toolchain for ESP8266. I won't explain it here, but you can check at [esp-open-sdk's repository](https://github.com/pfalcon/esp-open-sdk).
 2. Copy `include/user_config_example.h` and rename it to `include/user_config.h`. You can change the wifi setting in this file.
-3. Open `Makefile` and change the path setting of `XTENSA_TOOLS_ROOT`, `SDK_BASE`, `ESPPORT`, and `EXTRA_INCDIR` to your build toolchain installation path.
-4. If you use DHT22 sensor instead of DHT11, you can change it at `user_main.c` line 20. Replace `SENSOR_DHT11` with `SENSOR_DHT22`. 
+3. If you use DHT22 sensor instead of DHT11, you can change it at `user_main.c` line 20. Replace `SENSOR_DHT11` with `SENSOR_DHT22`. 
 
 # How to install
 
-1. run `make` to build the firmware.
-2. run `make flash` to burn the firmware into ESP8266 chip.
+1. run `make SDK_BASE="/path/to/your/esp-open-sdk/sdk" FLAVOR="release" ESPTOOL="esptool.py" all` to build the firmware.
+2. run `make ESPPORT="/dev/tty.usbserial" flash` to burn the firmware into ESP8266 chip.
 
 # Wiring up your DHT sensor to ESP8266
 
