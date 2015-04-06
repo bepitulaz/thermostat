@@ -2,7 +2,9 @@
 #include "osapi.h"
 #include "gpio.h"
 #include "os_type.h"
+#include "mqtt.h"
 #include "sensor.h"
+#include "mem.h"
 
 #define MAXTIMINGS 10000
 #define DHT_MAXCOUNT 32000
@@ -142,7 +144,19 @@ void ICACHE_FLASH_ATTR poll_dht_cb(void *arg) {
   
   os_printf("Temperature =  %d *C, Humidity = %d %%\n", (int)(reading.temperature), (int)(reading.humidity));
   
+  // publish to mqtt
+  const char *temperature;
+  const char *humidity;
+  os_sprintf(temperature, "%d", (int)reading.temperature);
+  os_sprintf(humidity, "%d", (int)reading.humidity);
+  MQTT_Client* client = (MQTT_Client*)arg;
+  MQTT_Publish(client, "/sensor/temperature/0", temperature, 6, 0, 0);
+  MQTT_Publish(client, "/sensor/humidity/0", humidity, 6, 0, 0);
+
   reading.success = 1;
+
+  os_free(temperature);
+  os_free(humidity);
   return;
 fail:
   
@@ -158,7 +172,7 @@ fail:
  */
 void init_sensor(enum sensor_type sensortype, uint32_t polltime) {
   g_DHTType = sensortype;
-
+  
   PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO2_U, FUNC_GPIO2);
   gpio_output_set(1, 0, DHTGPIO, 0);
   os_timer_setfn(&dht_timer, poll_dht_cb, NULL);
